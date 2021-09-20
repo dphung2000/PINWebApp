@@ -1,24 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
+import Header from "./UI/Header";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { Container, Row, Col, Collapse, Modal } from "react-bootstrap";
+import Options from "./UI/Options";
+import { useState } from "react";
+import Customer from "./Options/Customer";
+import Project from "./Options/Project";
+import Supplier from "./Options/Supplier";
+import ProjectList from "./Options/ProjectList";
+import ErrorPage from "./Options/ErrorPage";
 
 function App() {
+  const [option, setOption] = useState("ProjectList");
+  const [isError, setModal] = useState(true);
+
+  const content = (
+    <>
+      <Options chooseOption={setOption} />
+      <Col xs={11} style={{ paddingLeft: "2%", paddingTop: "1%" }}>
+        {option === "ProjectList" && <ProjectList />}
+        {option === "Customer" && <Customer />}
+        {option === "Project" && <Project />}
+        {option === "Supplier" && <Supplier />}
+      </Col>
+    </>
+  );
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Header />
+      <Container fluid style={{ borderTop: "1px solid #0000003d" }}>
+        <Row className="justify-content-md-center">
+          {!isError && content}
+          {isError && <ErrorPage setOption={setOption} setModal={setModal}/>}
+        </Row>
+      </Container>
+    </>
   );
 }
 

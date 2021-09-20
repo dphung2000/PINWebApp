@@ -1,0 +1,24 @@
+.button > div > Button {
+  font-weight: bold;
+  color: #4ba1fd;
+  margin-bottom: 20%;
+  padding: 8% 0;
+  margin-top: 2%;
+}
+.button > div > Button:hover {
+  border: 1px solid #0000003d !important;
+  background-color: #e2e6ea !important;
+  border-radius: 5%;
+}
+
+.collapseButton > Button {
+  margin-bottom: 10%;
+  opacity: 46%;
+  font-weight: bold;
+  padding: 8% 0;
+}
+.collapseButton > Button:hover {
+  border: 1px solid #0000003d !important;
+  background-color: #e2e6ea !important;
+  border-radius: 5%;
+}

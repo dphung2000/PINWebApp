@@ -1,0 +1,11 @@
+.xIcon img {
+  width: 300px;
+  height: 300px;
+  filter: invert(53%) sepia(62%) saturate(5493%) hue-rotate(337deg)
+    brightness(130%) contrast(118%)
+}
+.middle{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+}
