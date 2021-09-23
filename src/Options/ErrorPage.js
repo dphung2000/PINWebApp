@@ -31,7 +31,7 @@ const ErrorPage = (props) => {
               props.setModal(false);
               props.setOption("ProjectList");
             }}
-            style={{ color: "#4ba1fd" }}
+            style={{ color: "#4ba1fd", cursor: "pointer" }}
           >
             back to search project
           </span>

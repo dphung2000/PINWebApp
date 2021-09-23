@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Container, Navbar, Nav, NavDropdown, Button } from "react-bootstrap";
+import { Container, Navbar, Nav} from "react-bootstrap";
 import logo from "../image/elca.png";
 import classes from "./Header.module.css";
 
@@ -7,11 +7,11 @@ const Header = (props) => {
   const [lang, setLang] = useState("EN");
   const toEN = () => {
     console.log("Changed to EN");
-    if (lang != "EN") setLang("EN"); 
+    if (lang !== "EN") setLang("EN"); 
   }
   const toFR = () => {
     console.log("Changed to FR");
-    if (lang != "FR") setLang("FR");
+    if (lang !== "FR") setLang("FR");
   }
   // return <header>Project Information Management</header>
   return (
