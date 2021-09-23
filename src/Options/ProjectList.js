@@ -22,22 +22,12 @@ const dateMapper = (date) => {
     properDate.getFullYear()
   );
 };
-const callDeleteProjects = async (ids) => {
-  let dataString = ids.map(id => `id=${id}&`).join("");
-  dataString = dataString.substring(0, dataString.length - 1);
-  console.log("data string",dataString);
-  await axios
-  .delete(`http://localhost:8200/api/Project?${dataString}`)
-  .then(res => {
-    console.log(res);
-    console.log(res.data);
-  })
-}
+
 const ProjectList = (props) => {
   const [selectStatus, setSelectStatus] = useState("");
   const [listProject, setListProject] = useState([]);
-  const [removeList, setRemoveList] = useState([]);
-  const getRequestAPI = useCallback(async () => {
+  let [removeList, setRemoveList] = useState([]);
+  const getRequestAPI = async () => {
     await axios
       .get(`http://localhost:8200/api/Project`)
       .then((res) => {
@@ -45,15 +35,25 @@ const ProjectList = (props) => {
         setListProject(res.data);
       })
       .catch((error) => props.setModal(true));
-  });
+  };
   useEffect(() => {
     getRequestAPI();
   }, []);
-  console.log("res get Project", listProject);
   const selectHandler = (event) => {
     setSelectStatus(event.target.value);
   };
-
+  const callDeleteProjects = async (ids) => {
+    let dataString = ids.map((id) => `id=${id}&`).join("");
+    dataString = dataString.substring(0, dataString.length - 1);
+    console.log("data string", dataString);
+    await axios
+      .delete(`http://localhost:8200/api/Project?${dataString}`)
+      .then((res) => {
+        console.log("Deletion was successful");
+        setRemoveList(removeList.filter(x => !ids.includes(x)));
+        getRequestAPI();
+      });
+  };
   const metaData = [
     "",
     "Number",
@@ -162,7 +162,10 @@ const ProjectList = (props) => {
                     <button
                       type="button"
                       className={classes["trash-bin"]}
-                      onClick={() => callDeleteProjects([rowData.ID])}
+                      onClick={() => {
+                        callDeleteProjects([rowData.ID]);
+                        console.log("object deleted");
+                      }}
                     >
                       <img src={TrashImage} alt="delete button" />
                     </button>
@@ -182,7 +185,6 @@ const ProjectList = (props) => {
                   className={classes["trash-bin"]}
                   onClick={() => {
                     callDeleteProjects(removeList);
-                    getRequestAPI();
                   }}
                 >
                   <img src={TrashImage} alt="delete button" />
