@@ -174,7 +174,7 @@ const ProjectList = (props) => {
           {removeList.length !== 0 && (
             <tr>
               <td colSpan={6} style={{ borderRight: "none" }}>
-                Suck my {removeList.length} inches dick
+                {removeList.length} items selected
               </td>
               <td style={{ borderLeft: "none" }}>
                 <button
