@@ -1,0 +1,6 @@
+.header-text *{
+    font-weight: bold;
+    opacity: 70%;
+    background-color: transparent;
+    border: none;
+}

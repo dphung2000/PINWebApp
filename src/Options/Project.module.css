@@ -1,0 +1,22 @@
+.title {
+  font-weight: bold;
+  font-size: 25px;
+  opacity: 60%;
+}
+
+.form {
+  margin-top: 2%;
+  margin-left: 5%;
+  margin-bottom: 2%;
+  padding-bottom: 2%;
+}
+
+.invalid {
+  border: 1px solid #b40e0e;
+  background-color: #fddddd;
+}
+
+.invalid:focus {
+  border-color: #ff8800;
+  background-color: #fbe8d2;
+}

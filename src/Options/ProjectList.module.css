@@ -1,0 +1,27 @@
+.search-button {
+  margin-right: 5%;
+}
+.reset-button {
+  margin-bottom: 0px;
+  background-color: transparent;
+  color: blue;
+  border: none;
+}
+.table {
+  border-right: 1px solid #dee2e6;
+  width: auto;
+}
+.trash-bin {
+    border: transparent;
+    background-color: transparent;
+    display: block;
+    margin: auto;
+}
+
+.trash-bin img{
+  width: 20px;
+  height: 20px;
+  margin: auto;
+  filter: invert(53%) sepia(62%) saturate(5493%) hue-rotate(337deg)
+    brightness(130%) contrast(118%);
+}
