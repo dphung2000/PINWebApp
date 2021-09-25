@@ -25,7 +25,7 @@ const Options = (props) => {
             aria-controls="collapseExample"
             onClick={chooseProjectList}
           >
-            Project List
+            {props.t("opt.pList")}
           </Button>
           <br/>
           <Button
@@ -34,21 +34,21 @@ const Options = (props) => {
             aria-controls="collapseExample"
             onClick={() => setOpen(!open)}
           >
-            New
+            {props.t("opt.new")}
           </Button>
           <br/>
         <Collapse in={open}>
           <div id="collapseExample" className={classes.collapseButton}>
             <Button variant="light" onClick={chooseProject}>
-              Project
+            {props.t("opt.nProject")}
             </Button>
             <br/>
             <Button variant="light" onClick={chooseCustomer}>
-              Customer
+            {props.t("opt.nCustomer")}
             </Button>
             <br/>
             <Button variant="light" onClick={chooseSupplier}>
-              Supplier
+            {props.t("opt.nSupplier")}
             </Button>
           </div>
         </Collapse>

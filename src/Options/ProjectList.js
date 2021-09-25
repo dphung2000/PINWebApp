@@ -4,14 +4,6 @@ import TrashImage from "../image/trash-alt-solid.svg";
 import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 
-const statusMapper = (stat) => {
-  return (
-    (stat === "pla" && "Planned") ||
-    (stat === "fin" && "Finished") ||
-    (stat === "new" && "New") ||
-    (stat === "inp" && "In progress")
-  );
-};
 const dateMapper = (date) => {
   const properDate = new Date(date);
   return (
@@ -27,6 +19,9 @@ const ProjectList = (props) => {
   const [selectStatus, setSelectStatus] = useState("");
   const [listProject, setListProject] = useState([]);
   let [removeList, setRemoveList] = useState([]);
+  const statusMapper = (stat) => {
+    return props.t(`projectlist.${stat}`);
+  };
   const getRequestAPI = async () => {
     await axios
       .get(`http://localhost:8200/api/Project`)
@@ -50,18 +45,18 @@ const ProjectList = (props) => {
       .delete(`http://localhost:8200/api/Project?${dataString}`)
       .then((res) => {
         console.log("Deletion was successful");
-        setRemoveList(removeList.filter(x => !ids.includes(x)));
+        setRemoveList(removeList.filter((x) => !ids.includes(x)));
         getRequestAPI();
       });
   };
   const metaData = [
     "",
-    "Number",
-    "Name",
-    "Status",
-    "Customer",
-    "Start Date",
-    "Delete",
+    props.t("projectlist.numberCol"),
+    props.t("projectlist.nameCol"),
+    props.t("projectlist.statusCol"),
+    props.t("projectlist.customerCol"),
+    props.t("projectlist.dateCol"),
+    props.t("projectlist.deleteCol"),
   ];
   // const tempData = [
   //   {
@@ -90,33 +85,33 @@ const ProjectList = (props) => {
 
   return (
     <>
-      <h4>Project List</h4>
+      <h4>{props.t("projectlist.projectList")}</h4>
       <hr />
       <Form onSubmit={console.log}>
         <Row>
           <Col xs={4}>
             <Form.Control
               type="text"
-              placeholder="Project number, name, customer name"
+              placeholder={props.t("projectlist.inputPH")}
             />
           </Col>
           <Col xs={2}>
             <Form.Select value={selectStatus} onChange={selectHandler}>
               <option disabled value="">
-                Project Status
+                {props.t("projectlist.statPH")}
               </option>
-              <option value="New">New</option>
-              <option value="Planned">Planned</option>
-              <option value="Finished">Finished</option>
-              <option value="In progress">In progress</option>
+              <option value="New">{props.t("projectlist.new")}</option>
+              <option value="Planned">{props.t("projectlist.pla")}</option>
+              <option value="Finished">{props.t("projectlist.fin")}</option>
+              <option value="In progress">{props.t("projectlist.inp")}</option>
             </Form.Select>
           </Col>
           <Col xs={6}>
             <Button className={classes["search-button"]} variant={"primary"}>
-              Search Project
+              {props.t("projectlist.searchBtn")}
             </Button>
             <Button className={"mb-2 " + classes["reset-button"]}>
-              Reset Search
+              {props.t("projectlist.resetBtn")}
             </Button>
           </Col>
         </Row>
@@ -158,7 +153,7 @@ const ProjectList = (props) => {
                   {dateMapper(rowData.Start_date)}
                 </td>
                 <td className={classes.table}>
-                  {statusMapper(rowData.Status) === "New" && (
+                  {rowData.Status === "new" && (
                     <button
                       type="button"
                       className={classes["trash-bin"]}

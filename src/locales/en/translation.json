@@ -1,0 +1,38 @@
+{
+  "header": {
+    "PIMTitle": "Project Information Management",
+    "Help": "Help",
+    "Logout": "Logout"
+  },
+  "error": {
+    "line1": "Unexpected error occurred",
+    "line2.1": "Please",
+    "line2.2": " contact your administrator",
+    "line3.1": "Or",
+    "line3.2": " back to search project"
+  },
+  "projectlist": {
+    "numberCol": "Number",
+    "nameCol": "Name",
+    "statusCol": "Status",
+    "customerCol": "Customer",
+    "dateCol": "Start Date",
+    "deleteCol": "Delete",
+    "new": "New",
+    "pla": "Planned",
+    "fin": "Finished",
+    "inp": "In progress",
+    "statPH": "Project Status",
+    "searchBtn": "Search Project",
+    "resetBtn": "Reset Search",
+    "inputPH": "Project number, name, customer name",
+    "projectList": "Project List"
+  },
+  "opt":{
+      "pList": "Project List",
+      "new": "New",
+      "nProject": "Project",
+      "nCustomer": "Customer",
+      "nSupplier": "Supplier"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "header": {
+    "PIMTitle": "Gestion de l'information sur le Projet",
+    "Help": "Aide",
+    "Logout": "Se déconnecter"
+  },
+  "error": {
+    "line1": "Une erreur inattendue s'est produite",
+    "line2.1": "Veuillez",
+    "line2.2": " contacter votre administrateur",
+    "line3.1": "Ou",
+    "line3.2": " revenir à recherche de projet"
+  },
+  "projectlist": {
+    "numberCol": "Numéro",
+    "nameCol": "Nom",
+    "statusCol": "Statut",
+    "customerCol": "Client",
+    "dateCol": "Date de Début",
+    "deleteCol": "Effacer",
+    "new": "Nouvelle",
+    "pla": "Prévu",
+    "fin": "Fini",
+    "inp": "En cours",
+    "statPH": "L'état du Projet",
+    "searchBtn": "Recherche de Projet",
+    "resetBtn": "Recherche Réinitialiser",
+    "inputPH": "Numéro de projet, nom, nom du client",
+    "projectList": "Liste de Projets"
+  },
+  "opt":{
+      "pList": "Liste de Projets",
+      "new": "Nouvelle",
+      "nProject": "Projet",
+      "nCustomer": "Client",
+      "nSupplier": "Fournisseur"
+  }
+}

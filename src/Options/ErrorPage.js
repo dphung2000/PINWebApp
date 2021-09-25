@@ -20,12 +20,12 @@ const ErrorPage = (props) => {
           justifyContent: "center",
         }}
       >
-        <p>Unexpected error occurred</p>
+        <p>{props.t("error.line1")}</p>
         <p>
-          Please <span style={{ color: "red" }}>contact your administator</span>
+        {props.t("error.line2.1")}<span style={{ color: "red" }}>{props.t("error.line2.2")}</span>
         </p>
         <p>
-          Or{" "}
+        {props.t("error.line3.1")}
           <span
             onClick={() => {
               props.setModal(false);
@@ -33,7 +33,7 @@ const ErrorPage = (props) => {
             }}
             style={{ color: "#4ba1fd", cursor: "pointer" }}
           >
-            back to search project
+            {props.t("error.line3.2")}
           </span>
         </p>
       </Col>

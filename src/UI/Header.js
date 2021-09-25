@@ -6,10 +6,12 @@ import classes from "./Header.module.css";
 const Header = (props) => {
   const [lang, setLang] = useState("EN");
   const toEN = () => {
+    props.i18n.changeLanguage("en");
     console.log("Changed to EN");
     if (lang !== "EN") setLang("EN"); 
   }
   const toFR = () => {
+    props.i18n.changeLanguage("fr");
     console.log("Changed to FR");
     if (lang !== "FR") setLang("FR");
   }
@@ -28,15 +30,15 @@ const Header = (props) => {
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
             <Nav.Item className={classes["header-text"]}>
-              <h3>Project Information Management</h3>
+              <h3>{props.t("header.PIMTitle")}</h3>
             </Nav.Item>
           </Nav>
           <Nav.Item className={classes["header-text"]}>
               <button style={{color: lang === "EN" ? "#4ba1fd" : "black"}} onClick={toEN}>EN</button>
               <span>|</span>
               <button style={{color: lang === "FR" ? "#4ba1fd": "black"}} onClick={toFR}>FR</button>
-              <button>Help</button>
-              <button>Logout</button>
+              <button>{props.t("header.Help")}</button>
+              <button>{props.t("header.Logout")}</button>
           </Nav.Item>
         </Navbar.Collapse>
       </Container>
