@@ -7,7 +7,7 @@ const ErrorPage = (props) => {
     <>
       <Col xs={4} className={classes.middle}>
         <span className={classes.xIcon}>
-          <img src={xCircle} />
+          <img src={xCircle} alt="big X"/>
         </span>
       </Col>
       <Col

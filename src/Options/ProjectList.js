@@ -1,7 +1,7 @@
 import { Button, Col, Form, Pagination, Row, Table } from "react-bootstrap";
 import classes from "./ProjectList.module.css";
 import TrashImage from "../image/trash-alt-solid.svg";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 const dateMapper = (date) => {
@@ -18,10 +18,8 @@ const dateMapper = (date) => {
 const ProjectList = (props) => {
   const [selectStatus, setSelectStatus] = useState("");
   const [listProject, setListProject] = useState([]);
-  let [removeList, setRemoveList] = useState([]);
-  const statusMapper = (stat) => {
-    return props.t(`projectlist.${stat}`);
-  };
+  const [removeList, setRemoveList] = useState([]);
+
   const getRequestAPI = async () => {
     await axios
       .get(`http://localhost:8200/api/Project`)
@@ -33,9 +31,14 @@ const ProjectList = (props) => {
   };
   useEffect(() => {
     getRequestAPI();
-  }, []);
+  },[]);
+
   const selectHandler = (event) => {
     setSelectStatus(event.target.value);
+  };
+
+  const searchHandler = () => {
+    return 0;
   };
   const callDeleteProjects = async (ids) => {
     let dataString = ids.map((id) => `id=${id}&`).join("");
@@ -58,22 +61,6 @@ const ProjectList = (props) => {
     props.t("projectlist.dateCol"),
     props.t("projectlist.deleteCol"),
   ];
-  // const tempData = [
-  //   {
-  //     key: 3116,
-  //     name: "Facturation/ Encaissements",
-  //     status: "New",
-  //     customer: "Les Retaites Populaires",
-  //     "start-date": "25.02.2004",
-  //   },
-  //   {
-  //     key: 3118,
-  //     name: "GKBWEB",
-  //     status: "Finished",
-  //     customer: "GKB",
-  //     "start-date": "10.10.2002",
-  //   },
-  // ];
   let pagination = [];
   for (var i = 1; i < 5; i++)
     pagination.push(
@@ -100,14 +87,14 @@ const ProjectList = (props) => {
               <option disabled value="">
                 {props.t("projectlist.statPH")}
               </option>
-              <option value="New">{props.t("projectlist.new")}</option>
-              <option value="Planned">{props.t("projectlist.pla")}</option>
-              <option value="Finished">{props.t("projectlist.fin")}</option>
-              <option value="In progress">{props.t("projectlist.inp")}</option>
+              <option value="new">{props.t("projectlist.new")}</option>
+              <option value="pla">{props.t("projectlist.pla")}</option>
+              <option value="fin">{props.t("projectlist.fin")}</option>
+              <option value="inp">{props.t("projectlist.inp")}</option>
             </Form.Select>
           </Col>
           <Col xs={6}>
-            <Button className={classes["search-button"]} variant={"primary"}>
+            <Button className={classes["search-button"]} variant={"primary"} onClick={searchHandler}>
               {props.t("projectlist.searchBtn")}
             </Button>
             <Button className={"mb-2 " + classes["reset-button"]}>
@@ -146,7 +133,7 @@ const ProjectList = (props) => {
                 <td className={classes.table}>{rowData.Project_number}</td>
                 <td className={classes.table}>{rowData.Name}</td>
                 <td className={classes.table}>
-                  {statusMapper(rowData.Status)}
+                  {props.t(`projectlist.${rowData.Status}`)}
                 </td>
                 <td className={classes.table}>{rowData.Customer}</td>
                 <td className={classes.table}>
