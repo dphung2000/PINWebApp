@@ -16,22 +16,33 @@ function App() {
   const [t, i18n] = useTranslation();
   const content = (
     <>
-      <Options chooseOption={setOption} t={t}/>
+      <Options chooseOption={setOption} t={t} />
       <Col xs={11} style={{ paddingLeft: "2%", paddingTop: "1%" }}>
-        {option === "ProjectList" && <ProjectList setModal={setModal} t={t}/>}
-        {option === "Customer" && <Customer t={t}/>}
-        {option === "Project" && <Project setModal={setModal} t={t}/>}
-        {option === "Supplier" && <Supplier t={t}/>}
+        {option === "ProjectList" && (
+          <ProjectList chooseOption={setOption} setModal={setModal} t={t} />
+        )}
+        {option === "Customer" && <Customer t={t} />}
+        {option === "Project" && (
+          <Project
+            update={false}
+            chooseOption={setOption}
+            setModal={setModal}
+            t={t}
+          />
+        )}
+        {option === "Supplier" && <Supplier t={t} />}
       </Col>
     </>
   );
   return (
     <>
-      <Header t={t} i18n={i18n}/>
+      <Header t={t} i18n={i18n} />
       <Container fluid style={{ borderTop: "1px solid #0000003d" }}>
         <Row className="justify-content-md-center">
           {!isError && content}
-          {isError && <ErrorPage setOption={setOption} setModal={setModal} t={t}/>}
+          {isError && (
+            <ErrorPage setOption={setOption} setModal={setModal} t={t} />
+          )}
         </Row>
       </Container>
     </>

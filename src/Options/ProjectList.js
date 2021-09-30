@@ -1,7 +1,7 @@
 import { Button, Col, Form, Pagination, Row, Table } from "react-bootstrap";
 import classes from "./ProjectList.module.css";
 import TrashImage from "../image/trash-alt-solid.svg";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 
 const dateMapper = (date) => {
@@ -16,9 +16,16 @@ const dateMapper = (date) => {
 };
 
 const ProjectList = (props) => {
-  const [selectStatus, setSelectStatus] = useState("");
+  //const [selectStatus, setSelectStatus] = useState("");
+  const [searched, setSearched] = useState(false);
+  const optionRef = useRef();
+  const inputRef = useRef();
   const [listProject, setListProject] = useState([]);
+  const [listProjectEmployee, setListProjectEmployee] = useState([]);
   const [removeList, setRemoveList] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [listProjectPerPage, setListProjectPerPage] = useState([]);
+  const itemsPerPage = 5;
 
   const getRequestAPI = async () => {
     await axios
@@ -26,31 +33,91 @@ const ProjectList = (props) => {
       .then((res) => {
         console.log("Called API");
         setListProject(res.data);
+        //setListProjectPerPage(res.data.slice(0, Math.min(itemsPerPage, res.data.length)));
+      })
+      .catch((error) => props.setModal(true));
+    await axios
+      .get(`http://localhost:8200/api/ProjectEmployee`)
+      .then((res) => {
+        console.log("Called API");
+        setListProjectEmployee(res.data);
+        //setListProjectPerPage(res.data.slice(0, Math.min(itemsPerPage, res.data.length)));
       })
       .catch((error) => props.setModal(true));
   };
+
   useEffect(() => {
     getRequestAPI();
-  },[]);
+  }, []);
 
-  const selectHandler = (event) => {
-    setSelectStatus(event.target.value);
+  useEffect(() => {
+    pageChangeHandler(1);
+  }, [listProject]);
+
+  const pageChangeHandler = (pageNum) => {
+    // console.log("Current page",pageNum);
+    setCurrentPage(pageNum);
+    const startingIndex = (pageNum - 1) * itemsPerPage;
+    // console.log("Number of items on this page",listProject.length,startingIndex,Math.min(itemsPerPage, listProject.length - startingIndex));
+    // console.log("Items",listProject.slice(startingIndex, Math.min(startingIndex + itemsPerPage, listProject.length)));
+    setListProjectPerPage(
+      listProject.slice(
+        startingIndex,
+        Math.min(startingIndex + itemsPerPage, listProject.length)
+      )
+    );
   };
 
+  const inputFilter = (data) => {
+    const criteria = inputRef.current.value.trim();
+    if (criteria === "") return data;
+    return data.filter(
+      (x) =>
+        x.Project_number.toString().includes(criteria) ||
+        x.Name.includes(criteria) ||
+        x.Customer.includes(criteria)
+    );
+  };
+  const optionFilter = (data) => {
+    const criteria = optionRef.current.value;
+    if (criteria === "") return data;
+    return data.filter((x) => x.Status === criteria);
+  };
   const searchHandler = () => {
-    return 0;
+    if (searched) {
+      return;
+    }
+    console.log("inputRef", inputRef.current.value);
+    console.log("optionRef", optionRef.current.value);
+    setListProject(optionFilter(inputFilter(listProject)));
+    setSearched(true);
   };
-  const callDeleteProjects = async (ids) => {
+
+  const resetHandler = () => {
+    inputRef.current.value = "";
+    optionRef.current.value = "";
+    setSearched(false);
+    getRequestAPI();
+  };
+
+  const callDeleteAPI = async (ids, type) => {
     let dataString = ids.map((id) => `id=${id}&`).join("");
     dataString = dataString.substring(0, dataString.length - 1);
     console.log("data string", dataString);
     await axios
-      .delete(`http://localhost:8200/api/Project?${dataString}`)
+      .delete(`http://localhost:8200/api/${type}?${dataString}`)
       .then((res) => {
         console.log("Deletion was successful");
         setRemoveList(removeList.filter((x) => !ids.includes(x)));
         getRequestAPI();
       });
+  };
+  const projectDeleteHandler = (ids) => {
+    console.log("ProjectEmployee", listProjectEmployee);
+    const PEToBeDeleted = listProjectEmployee.filter(x => ids.includes(x.Project_ID)).map(x => x.ID);
+    callDeleteAPI(PEToBeDeleted, "ProjectEmployee");
+    callDeleteAPI(ids, "Project");
+    // getRequestAPI();
   };
   const metaData = [
     "",
@@ -62,12 +129,19 @@ const ProjectList = (props) => {
     props.t("projectlist.deleteCol"),
   ];
   let pagination = [];
-  for (var i = 1; i < 5; i++)
+  for (var i = 1; i <= Math.ceil(listProject.length / itemsPerPage); i++) {
+    //console.log("Added page",i);
+    const pageNumberPH = i;
     pagination.push(
-      <Pagination.Item key={i} active={i === 1}>
+      <Pagination.Item
+        key={i}
+        active={pageNumberPH === currentPage}
+        onClick={() => pageChangeHandler(pageNumberPH)}
+      >
         {i}
       </Pagination.Item>
     );
+  }
   pagination = <Pagination style={{ float: "right" }}>{pagination}</Pagination>;
 
   return (
@@ -80,13 +154,12 @@ const ProjectList = (props) => {
             <Form.Control
               type="text"
               placeholder={props.t("projectlist.inputPH")}
+              ref={inputRef}
             />
           </Col>
           <Col xs={2}>
-            <Form.Select value={selectStatus} onChange={selectHandler}>
-              <option disabled value="">
-                {props.t("projectlist.statPH")}
-              </option>
+            <Form.Select ref={optionRef}>
+              <option value="">{props.t("projectlist.statPH")}</option>
               <option value="new">{props.t("projectlist.new")}</option>
               <option value="pla">{props.t("projectlist.pla")}</option>
               <option value="fin">{props.t("projectlist.fin")}</option>
@@ -94,10 +167,17 @@ const ProjectList = (props) => {
             </Form.Select>
           </Col>
           <Col xs={6}>
-            <Button className={classes["search-button"]} variant={"primary"} onClick={searchHandler}>
+            <Button
+              className={classes["search-button"]}
+              variant={"primary"}
+              onClick={searchHandler}
+            >
               {props.t("projectlist.searchBtn")}
             </Button>
-            <Button className={"mb-2 " + classes["reset-button"]}>
+            <Button
+              className={"mb-2 " + classes["reset-button"]}
+              onClick={resetHandler}
+            >
               {props.t("projectlist.resetBtn")}
             </Button>
           </Col>
@@ -112,11 +192,12 @@ const ProjectList = (props) => {
           </tr>
         </thead>
         <tbody>
-          {listProject.map((rowData) => {
+          {listProjectPerPage.map((rowData) => {
             return (
               <tr>
                 <td className={classes.table} style={{ textAlign: "center" }}>
                   <Form.Check
+                    checked={removeList.includes(rowData.ID)}
                     disabled={rowData.Status !== "new"}
                     onChange={(event) => {
                       console.log("event checkbox", event.target.checked);
@@ -145,7 +226,7 @@ const ProjectList = (props) => {
                       type="button"
                       className={classes["trash-bin"]}
                       onClick={() => {
-                        callDeleteProjects([rowData.ID]);
+                        projectDeleteHandler([rowData.ID]);
                         console.log("object deleted");
                       }}
                     >
@@ -166,7 +247,7 @@ const ProjectList = (props) => {
                   type="button"
                   className={classes["trash-bin"]}
                   onClick={() => {
-                    callDeleteProjects(removeList);
+                    projectDeleteHandler(removeList);
                   }}
                 >
                   <img src={TrashImage} alt="delete button" />

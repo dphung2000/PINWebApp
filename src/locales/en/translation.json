@@ -34,5 +34,24 @@
       "nProject": "Project",
       "nCustomer": "Customer",
       "nSupplier": "Supplier"
+  },
+  "new":{
+    "project":{
+      "title1": "New Project",
+      "title2": "Edit Project Information",
+      "pNum": "Project Number",
+      "pNumError": "The project number already existed. Please select a different project number",
+      "pName": "Project Name",
+      "customer": "Customer",
+      "group": "Group",
+      "member":"Member",
+      "status":"Status",
+      "sDate": "Start Date",
+      "eDate": "End Date",
+      "cancelBtn": "Cancel",
+      "projectBtn1": "Create Project",
+      "projectBtn2": "Edit Project",
+      "error": "Please enter all the mandatory fields (*)"
+    }
   }
 }

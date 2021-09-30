@@ -34,5 +34,25 @@
       "nProject": "Projet",
       "nCustomer": "Client",
       "nSupplier": "Fournisseur"
+  },
+  "new":{
+    "project":{
+      "title1": "Nouveau Projet",
+      "title2": "Modifier les Informations du Projet",
+      "pNum": "Numéro de Projet",
+      "pNumError": "Le numéro de projet existait déjà. Veuillez sélectionner un autre numéro de projet",
+      "pName": "Nom de Projet",
+      "customer": "Client",
+      "group": "Groupe",
+      "member":"Membre",
+      "status":"Statut",
+      "sDate": "Date de Début",
+      "eDate": "Date de Fin",
+      "cancelBtn": "Annuler",
+      "projectBtn1": "Créer Projet",
+      "projectBtn2": "Modifier Projet",
+      "error": "Veuillez saisir tous les champs obligatoires (*)"
+    }
   }
+
 }
