@@ -211,7 +211,7 @@ const ProjectList = (props) => {
                     }}
                   />
                 </td>
-                <td className={classes.table}>{rowData.Project_number}</td>
+                <td className={classes.table} onClick={() => props.beginUpdate(rowData)}>{rowData.Project_number}</td>
                 <td className={classes.table}>{rowData.Name}</td>
                 <td className={classes.table}>
                   {props.t(`projectlist.${rowData.Status}`)}

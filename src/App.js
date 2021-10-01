@@ -13,18 +13,27 @@ import { useTranslation } from "react-i18next";
 function App() {
   const [option, setOption] = useState("ProjectList");
   const [isError, setModal] = useState(false);
+  const [isUpdate, setIsUpdate] = useState(false);
+  const [targetP, setTargetP] = useState(null);
   const [t, i18n] = useTranslation();
+  const beginUpdate = targetProject =>{
+    setTargetP(targetProject);
+    setIsUpdate(true);
+    setOption("Project");
+  }
   const content = (
     <>
       <Options chooseOption={setOption} t={t} />
       <Col xs={11} style={{ paddingLeft: "2%", paddingTop: "1%" }}>
         {option === "ProjectList" && (
-          <ProjectList chooseOption={setOption} setModal={setModal} t={t} />
+          <ProjectList beginUpdate={beginUpdate} chooseOption={setOption} setModal={setModal} t={t} />
         )}
         {option === "Customer" && <Customer t={t} />}
         {option === "Project" && (
           <Project
-            update={false}
+            update={isUpdate}
+            setIsUpdate={setIsUpdate}
+            targetProject={targetP}
             chooseOption={setOption}
             setModal={setModal}
             t={t}

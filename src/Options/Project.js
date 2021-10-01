@@ -131,7 +131,8 @@ const Project = (props) => {
     if (
       projectData
         .map((rowData) => rowData.Project_number)
-        .includes(+enteredPNum)
+        .includes(+enteredPNum) &&
+      !props.update
     ) {
       setProjectNumberExist(true);
       formValid = false;
@@ -156,8 +157,9 @@ const Project = (props) => {
     if (props.update) {
       //Get records from ProjectEmployee for this project (ID, P_ID, E_ID)
       const currentPERecords = projectEmployeeData.filter(
-        (x) => x.Project_number === enteredPNum
+        (x) => x.Project_ID === props.targetProject.ID
       );
+      console.log("currentPERecords", currentPERecords);
       //ID for entered members
       const enteredVisa2ID = employeeData
         .filter((x) => enteredMember.includes(x.Visa))
@@ -173,10 +175,13 @@ const Project = (props) => {
       //Delete
       callDeleteAPI(IDToBeDeleted, "ProjectEmployee");
       //Add
+      console.log("PID", props.targetProject.ID);
+      console.log("IDAdd", IDToBeAdded);
+      console.log("IDToBeDeleted", IDToBeDeleted);
       IDToBeAdded.map((x) =>
         axios
           .post("http://localhost:8200/api/ProjectEmployee", {
-            Project_ID: enteredPNum,
+            Project_ID: props.targetProject.ID,
             Employee_ID: x,
           })
           .then(() => {
@@ -184,8 +189,24 @@ const Project = (props) => {
           })
           .catch((error) => props.setModal(true))
       );
-
+      //Update
+      console.log("data", {
+        ID: props.targetProject.ID,
+        ...content,
+      });
+      axios
+        .put("http://localhost:8200/api/Project", {
+          ID: props.targetProject.ID,
+          ...content,
+        })
+        .then(() => console.log("Successfully updated a project"))
+        .catch((error) => {
+          console.log("error", error);
+          props.setModal(true);
+        });
+      props.setIsUpdate(false);
       props.chooseOption("ProjectList");
+      return;
     }
     //Add the project first, project employee later
     axios
@@ -196,7 +217,7 @@ const Project = (props) => {
         const employeeForProject = employeeData
           .filter((x) => enteredMember.includes(x.Visa))
           .map((x) => x.ID);
-        employeeForProject.map((x) =>{
+        employeeForProject.map((x) => {
           // const projectID = projectData.filter(x => x.Project_number === enteredPNum).ID;
           const projectID = res.data.ID;
           console.log("projectID", projectID);
@@ -209,11 +230,12 @@ const Project = (props) => {
             .then(() => {
               console.log("Successfully added an employee to the project");
             })
-            .catch((error) => props.setModal(true))}
-        );
+            .catch((error) => props.setModal(true));
+        });
         props.chooseOption("ProjectList");
       })
       .catch((error) => props.setModal(true));
+      props.chooseOption("ProjectList");
   };
 
   const alert = (
@@ -251,6 +273,7 @@ const Project = (props) => {
               ref={projectNumberRef}
               onFocus={() => setProjectNumberExist(false)}
               readOnly={props.update}
+              value={props.update ? props.targetProject.Project_number : null}
             />
           </Col>
           <Col sm={6} style={{ color: "red" }}>
@@ -391,7 +414,9 @@ const Project = (props) => {
           <Button
             variant="secondary"
             style={{ margin: "0% 1%" }}
-            onClick={() => props.chooseOption("ProjectList")}
+            onClick={() => {
+              props.setIsUpdate(false);
+            }}
           >
             {t("new.project.cancelBtn")}
           </Button>
